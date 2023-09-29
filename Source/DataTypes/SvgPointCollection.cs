@@ -7,10 +7,10 @@ using System.Text;
 namespace Svg
 {
     /// <summary>
-    /// Represents a list of <see cref="SvgUnit"/> used with the <see cref="SvgPolyline"/> and <see cref="SvgPolygon"/>.
+    /// Represents a list of <see cref="SvgPoint"/> used with the <see cref="SvgPolyline"/> and <see cref="SvgPolygon"/>.
     /// </summary>
     [TypeConverter(typeof(SvgPointCollectionConverter))]
-    public class SvgPointCollection : List<SvgUnit>, ICloneable
+    public class SvgPointCollection : List<SvgPoint>, ICloneable
     {
         public object Clone()
         {
@@ -23,18 +23,16 @@ namespace Svg
         public override string ToString()
         {
             var builder = new StringBuilder();
-            for (var i = 0; i < Count; i += 2)
+            for (var i = 0; i < Count; ++i)
             {
-                if (i + 1 < Count)
+                if (i < Count)
                 {
-                    if (i > 1)
+                    if (i > 0)
                     {
                         builder.Append(" ");
                     }
                     // we don't need unit type
-                    builder.Append(this[i].Value.ToSvgString());
-                    builder.Append(",");
-                    builder.Append(this[i + 1].Value.ToSvgString());
+                    builder.Append(this[i].ToString());
                 }
             }
             return builder.ToString();
@@ -63,9 +61,14 @@ namespace Svg
                 var coords = s.AsSpan().Trim();
                 var state = new CoordinateParserState(ref coords);
                 var result = new SvgPointCollection();
-                while (CoordinateParser.TryGetFloat(out var pointValue, ref coords, ref state))
+                // per w3c an odd number of coordinates is an error and the last one should be ignored
+                while (CoordinateParser.TryGetFloat(out var coord1Value, ref coords, ref state))
                 {
-                    result.Add(new SvgUnit(SvgUnitType.User, pointValue));
+                    if (CoordinateParser.TryGetFloat(out var coord2Value, ref coords, ref state))
+                    {
+                        var point = new SvgPoint(coord1Value, coord2Value);
+                        result.Add(point);
+                    }
                 }
 
                 return result;

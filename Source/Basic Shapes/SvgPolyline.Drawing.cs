@@ -18,10 +18,10 @@ namespace Svg
 
                 try
                 {
-                    for (int i = 0; (i + 1) < Points.Count; i += 2)
+                    for (int i = 0; (i + 1) < Points.Count; ++i)
                     {
-                        PointF endPoint = new PointF(Points[i].ToDeviceValue(renderer, UnitRenderingType.Horizontal, this),
-                            Points[i + 1].ToDeviceValue(renderer, UnitRenderingType.Vertical, this));
+                        PointF endPoint = new PointF(Points[i].X.ToDeviceValue(renderer, UnitRenderingType.Horizontal, this),
+                            Points[i].Y.ToDeviceValue(renderer, UnitRenderingType.Vertical, this));
 
                         if (renderer == null)
                         {

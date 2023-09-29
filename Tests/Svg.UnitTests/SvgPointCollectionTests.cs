@@ -10,8 +10,8 @@ namespace Svg.UnitTests
         {
             var collection = new SvgPointCollection
             {
-                new SvgUnit(1.6f), new SvgUnit(3.2f),
-                new SvgUnit(1.2f), new SvgUnit(5f)
+                new SvgPoint(1.6f, 3.2f),
+                new SvgPoint(1.2f, 5f)
             };
             Assert.AreEqual("1.6,3.2 1.2,5", collection.ToString());
         }

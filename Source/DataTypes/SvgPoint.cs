@@ -1,4 +1,5 @@
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using System.Text;
 
 namespace Svg
 {
@@ -52,5 +53,20 @@ namespace Svg
             this.x = x;
             this.y = y;
         }
+        public SvgPoint(float x, float y)
+        {
+            this.x = new SvgUnit(x);
+            this.y = new SvgUnit(y);
+        }
+        public override string ToString()
+        {
+            var builder = new StringBuilder();
+            builder.Append(x.ToString());
+            builder.Append(",");
+            builder.Append(y.ToString()); 
+
+            return builder.ToString();
+        }
+
     }
 }

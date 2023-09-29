@@ -1,4 +1,4 @@
-#if !NO_SDC
+﻿#if !NO_SDC
 using System.Diagnostics;
 using System.Drawing.Drawing2D;
 
@@ -18,9 +18,9 @@ namespace Svg
                 try
                 {
                     var points = this.Points;
-                    for (int i = 0; (i + 1) < points.Count; i += 2)
+                    for (int i = 0; i < points.Count; ++i)
                     {
-                        var endPoint = SvgUnit.GetDevicePoint(points[i], points[i + 1], renderer, this);
+                        var endPoint = SvgUnit.GetDevicePoint(points[i].X, points[i].Y, renderer, this);
 
                         // If it is to render, don't need to consider stroke width.
                         // i.e stroke width only to be considered when calculating boundary
@@ -36,7 +36,7 @@ namespace Svg
                         // first line
                         else if (_path.PointCount == 0)
                         {
-                            _path.AddLine(SvgUnit.GetDevicePoint(points[i - 2], points[i - 1], renderer, this), endPoint);
+                            _path.AddLine(SvgUnit.GetDevicePoint(points[i - 1].X, points[i - 1].Y, renderer, this), endPoint);
                         }
                         else
                         {
