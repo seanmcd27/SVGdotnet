@@ -81,7 +81,7 @@ namespace Svg.UnitTests
                     Assert.AreNotEqual(null, pngImage, "Failed to load " + pngPath);
                     Assert.AreNotEqual(null, svgImage, "Failed to load " + svgPath);
                     var difference = svgImage.PercentageDifference(pngImage);
-                    if (difference >= 0.05)
+                    //if (difference >= 0.05)
                     {
                         svgDoc.Write("c:\\temp\\debug.svg");
                         svgImage.Save("c:\\temp\\debug.bmp");
