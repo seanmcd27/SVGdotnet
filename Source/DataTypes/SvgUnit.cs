@@ -4,6 +4,7 @@ using System.ComponentModel;
 namespace Svg
 {
     // TODO: figure out why this isn't called svglength to be consistent with w3c naming or fix it if the only reason is legacy codebase compat
+    // TODO: add operator overloads to support direct arithmetic on value
 
     /// <summary>
     /// Represents a unit in an Scalable Vector Graphics document.

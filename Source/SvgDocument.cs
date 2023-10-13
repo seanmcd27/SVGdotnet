@@ -422,6 +422,26 @@ namespace Svg
                                 styles.Add(unknown);
                             }
                             break;
+
+                        // TODO: figure out how to round-trip comments
+                        case XmlNodeType.Comment:
+#if XMLCOMMENTS
+                            element = new SVGComment(reader.Value);
+                            // Add to the parents children
+                            if (elementStack.Count > 0)
+                            {
+                                parent = elementStack.Peek();
+                                if (parent != null && element != null)
+                                {
+                                    parent.Children.Add(element);
+                                    parent.Nodes.Add(element);
+                                }
+                            }
+
+                            // Push element into stack
+                            elementStack.Push(element);
+#endif
+                            break;
                         case XmlNodeType.CDATA:
                         case XmlNodeType.Text:
                         case XmlNodeType.SignificantWhitespace:
