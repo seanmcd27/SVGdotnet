@@ -329,7 +329,7 @@ namespace Svg.UnitTests
             var imgDiffFactor = ((float)diffPixelCount / totalPixelCount);
             imgEqualPercentage = imgDiffFactor * 100;
 
-            return (imgDiffFactor == 1f);
+            return (imgDiffFactor < .0001f);
         }
     }
 }

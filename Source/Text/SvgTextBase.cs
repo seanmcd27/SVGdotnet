@@ -227,6 +227,10 @@ namespace Svg
             set { Attributes["fill"] = value; }
         }
 
+        public SvgPath ToSvgPath()
+        {
+            return ConvertPathToSvgPath(Path(null));
+        }
         /// <summary>
         /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
         /// </summary>

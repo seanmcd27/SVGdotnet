@@ -18,7 +18,7 @@ namespace Svg
         {
             // NOTE: starting with Windows 8.1, the DPI is no longer system-wide but screen-specific
             IntPtr hDC = GetDC(IntPtr.Zero);
-            const int LOGPIXELSY = 90;
+            const int LOGPIXELSY = 90; // note: this is the devcap property index from wingdi.h
             int result = GetDeviceCaps(hDC, LOGPIXELSY);
             ReleaseDC(IntPtr.Zero, hDC);
             return result;

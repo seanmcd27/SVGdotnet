@@ -1,11 +1,13 @@
 ﻿using NUnit.Framework;
+using System;
+using System.Drawing;
 using System.IO;
 using System.Xml;
 
 namespace Svg.UnitTests
 {
     [TestFixture]
-    public class SvgTextTests
+    public class SvgTextTests : SvgTestHelper
     {
         [Test]
         public void TextPropertyAffectsSvgOutput()
@@ -106,6 +108,46 @@ namespace Svg.UnitTests
             Assert.IsTrue(xml.Contains("y=\"30\""));
             Assert.IsTrue(xml.Contains("dx=\"40\""));
             Assert.IsTrue(xml.Contains("dy=\"50\""));
+        }
+        private bool TestConvertTextPathToSvgPathHelper(string fontFamily)
+        {
+            string testStr = "ABCDEFGhijklmnop123.,";
+            SvgText text = new SvgText()
+            {
+                Text = testStr,
+            };
+            text.FontFamily = fontFamily;
+            int fntSize = 32; // 24pt @ 96dpi
+            text.FontSize = new SvgUnit(SvgUnitType.Pixel, fntSize);
+            int width = (int)(text.Bounds.Width + 1);
+            int height = (int)(text.Bounds.Height + 1);
+            //var tform = text.Transforms ?? new Transforms.SvgTransformCollection();
+            //tform.Add(new Svg.Transforms.SvgTranslate(0, height));  // text renders assuming positive Y is up
+            //text.Transforms = tform;
+            var y = text.Y ?? new SvgUnitCollection();
+            y.Add(new SvgUnit(SvgUnitType.Pixel, height)); // text renders assuming positive Y is up
+            text.Y = y;
+
+            var svgDoc = new SvgDocument();
+            svgDoc.Children.Add(text);
+
+            var bitmap1 = new Bitmap(width, height);
+            svgDoc.Draw(bitmap1);
+            svgDoc = new SvgDocument();
+            var path = text.ToSvgPath();
+            svgDoc.Children.Add(path);
+            var bitmap2 = new Bitmap(width, height);
+            svgDoc.Draw(bitmap2);
+            float pct = 0.0f;
+            Bitmap imgDiff;
+            return ImagesAreEqual(bitmap1, bitmap2, out pct, out imgDiff);
+        }
+        [Test]
+        public void TestConvertTextPathToSvgPath()
+        {
+            // a couple of random fairly complex fonts that are built into windows
+            Assert.IsTrue(TestConvertTextPathToSvgPathHelper("Algerian"));  
+            Assert.IsTrue(TestConvertTextPathToSvgPathHelper("WingDings")); 
         }
     }
 }
