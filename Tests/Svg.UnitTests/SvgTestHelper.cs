@@ -331,5 +331,21 @@ namespace Svg.UnitTests
 
             return (imgDiffFactor < .0001f);
         }
+        protected virtual NonSvgElement GetStyleSheet()
+        {
+            var s = new NonSvgElement("style", "");
+            var attrs = s.CustomAttributes;
+            attrs["type"] = "text/css";
+            s.Content = @"
+.span1 {
+    font-family=""Gabriola"";
+    fill: green;
+}
+.span2 {
+    font-family=""Courier New"";
+}
+            ";
+            return s;
+        }
     }
 }

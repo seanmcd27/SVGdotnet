@@ -253,7 +253,7 @@ namespace Svg
             {
                 throw new ArgumentNullException("path");
             }
-
+            // TODO: convert relative to absolute
             if (!File.Exists(path))
             {
                 throw new FileNotFoundException("The specified document cannot be found.", path);

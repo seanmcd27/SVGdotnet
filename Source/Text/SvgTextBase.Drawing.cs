@@ -85,8 +85,9 @@ namespace Svg
             //if there is a TSpan inside of this text element then path should not be null (even if this text is empty!)
             var nodes = GetContentNodes().Where(x => x is SvgContentNode &&
                                                      string.IsNullOrEmpty(x.Content.Trim(new[] { '\r', '\n', '\t' })));
+            var c = nodes.Count();
 
-            if (_path == null || IsPathDirty || nodes.Count() == 1)
+            if (_path == null || IsPathDirty || c == 1)
             {
                 if (renderer != null && renderer is IGraphicsProvider)
                     SetPath(new TextDrawingState(renderer, this));
