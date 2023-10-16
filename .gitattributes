@@ -1,0 +1,25 @@
+#
+* text=auto
+
+*.cd text
+*.config text
+*.cs text
+*.csproj text
+*.dtd text
+*.json text
+*.sln text
+*.md text
+*.nuspec text
+*.resx text
+*.svg text
+*.testsettings text
+*.txt text
+*.vsmdi text
+*.xaml text
+*.xml text
+*.yml text
+
+.bmp binary
+.nupkg binary
+.png binary
+.snk binary
