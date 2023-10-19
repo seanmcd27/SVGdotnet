@@ -33,7 +33,26 @@ namespace Svg
 
             this._elements = new List<SvgElement>();
             this._owner = owner;
-            this._mock = mock;
+            this._mock = mock;  // TODO: figure out why production/release code is being cluttered and bloated with test collateral and implement equivalent test functionality in a different way
+        }
+
+        internal SvgElementCollection(SvgElement owner, IList<ISvgNode> nodes)
+        {
+            if (owner == null)
+            {
+                throw new ArgumentNullException("owner");
+            }
+
+            this._elements = new List<SvgElement>();
+            this._owner = owner;
+            foreach (var node in nodes)
+            {
+                SvgElement e = node as SvgElement;
+                if (e != null)
+                {
+                    _elements.Add(e);
+                }
+            }
         }
 
         /// <summary>

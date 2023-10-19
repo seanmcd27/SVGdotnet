@@ -993,8 +993,21 @@ namespace Svg
                 newObj.Attributes.Add(attribute.Key, value);
             }
 
-            foreach (var child in Children)
-                newObj.Children.Add(child.DeepCopy());
+            // nodes contains duplicate references to all the children.
+            // at doc load time, nodes/children are overlapping lists with duplicate references to the same underlying element objects
+            // after this deepcopy operation they now point at separate copies of the element/children objects
+            // this means that if one or the other is modified then rendering becomes inconsistent and unreliable.
+            // it's also a memory leak.
+
+            // therefore we are now going to deepcopy the nodes and then fixup the children
+            // from the node's references and without duplicating the object references in nodes since i updated
+            // svgelementcollection.add to maintain the nodes in order to solve a different problem.
+            foreach (var node in Nodes)
+            {
+                newObj.Nodes.Add(node.DeepCopy());
+            }
+
+            newObj._children = new SvgElementCollection(newObj, newObj.Nodes);
 
 #if USE_SOURCE_GENERATORS
             foreach (var property in this.GetProperties().Where(x => x.DescriptorType == DescriptorType.Event))
@@ -1051,9 +1064,6 @@ namespace Svg
 #endif
             foreach (var attribute in CustomAttributes)
                 newObj.CustomAttributes.Add(attribute.Key, attribute.Value);
-
-            foreach (var node in Nodes)
-                newObj.Nodes.Add(node.DeepCopy());
 
             return newObj;
         }

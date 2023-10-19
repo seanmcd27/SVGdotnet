@@ -76,11 +76,17 @@ namespace Svg.UnitTests
 
             using (var pngImage = Image.FromFile(pngPath))
             {
-                using (var svgImage = LoadSvgImage(svgDoc, useFixedSize))
+                using (var svgImage = DrawSvgImage(svgDoc, useFixedSize))
                 {
                     Assert.AreNotEqual(null, pngImage, "Failed to load " + pngPath);
                     Assert.AreNotEqual(null, svgImage, "Failed to load " + svgPath);
                     var difference = svgImage.PercentageDifference(pngImage);
+#if TESTDEBUG
+                    if (difference >= 0.05)
+                    {
+                        svgImage.Save($"c:\\temp\\bitmaps\\{baseName}.bmp");
+                    }
+#endif
                     Assert.IsTrue(difference < 0.05, svgPath + baseName + ": dbg Difference with " + pngPath + " is " + (difference * 100.0).ToString() + "%");
                 }
                 if (!testSaveLoad)
@@ -97,7 +103,7 @@ namespace Svg.UnitTests
                     var baseUri = svgDoc.BaseUri;
                     svgDoc = SvgDocument.Open<SvgDocument>(memStream);
                     svgDoc.BaseUri = baseUri;
-                    using (var svgImage = LoadSvgImage(svgDoc, useFixedSize))
+                    using (var svgImage = DrawSvgImage(svgDoc, useFixedSize))
                     {
                         Assert.IsNotNull(svgImage);
                         var difference = svgImage.PercentageDifference(pngImage);
@@ -131,7 +137,7 @@ namespace Svg.UnitTests
                     var svgDoc = LoadSvgDocument(svgPath);
                     bool useFixedSize = !baseName.StartsWith("__");
                     using (var pngImage = Image.FromFile(pngPath))
-                    using (var svgImage = LoadSvgImage(svgDoc, useFixedSize))
+                    using (var svgImage = DrawSvgImage(svgDoc, useFixedSize))
                     {
                         var difference = svgImage.PercentageDifference(pngImage);
                         Console.WriteLine(baseName + " " + (difference * 100.0).ToString());
@@ -143,7 +149,7 @@ namespace Svg.UnitTests
         /// <summary>
         /// Load the SVG image the same way as in the SVGW3CTestRunner.
         /// </summary>
-        private static Bitmap LoadSvgImage(SvgDocument svgDoc, bool usedFixedSize)
+        private static Bitmap DrawSvgImage(SvgDocument svgDoc, bool usedFixedSize)
         {
             Bitmap svgImage = null;
             try
