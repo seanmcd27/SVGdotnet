@@ -45,16 +45,16 @@
     </font-face>
   </defs>
   <g id="test-body-content" font-family="SVGFreeSansASCII,sans-serif" font-size="18">
-    <text font-size="34" x="5" y="40">Test 'baseline-shift' (horizontal)</text>
+    <text id="t-horiz" font-size="34" x="5" y="40">Test 'baseline-shift' (horizontal)</text>
     <g id="baseline-shift" font-size="30" transform="translate(15,120)">
-      <text y="0">
-        Normal<tspan baseline-shift="7" fill="fuchsia">baseline-shift:7</tspan>text
+      <text id="normal-1" y="0">
+        Normal<tspan id="bs7" baseline-shift="7" fill="fuchsia">baseline-shift:7</tspan>text
       </text>
-      <text y="70">
-        Normal<tspan baseline-shift="-70%" fill="fuchsia">baseline-shift:-70%</tspan>text
+      <text id="normal-2" y="70">
+        Normal<tspan id="bs70pct" baseline-shift="-70%" fill="fuchsia">baseline-shift:-70%</tspan>text
       </text>
-      <text y="140">
-        Normal<tspan baseline-shift="sub" fill="fuchsia">sub</tspan><tspan baseline-shift="super" fill="green">super</tspan><tspan baseline-shift="baseline" fill="blue">te</tspan>xt
+      <text id="normal-3" y="140">
+        Normal<tspan id="b-sub" baseline-shift="sub" fill="fuchsia">sub</tspan><tspan id="b-super" baseline-shift="super" fill="green">super</tspan><tspan id="te" baseline-shift="baseline" fill="blue">te</tspan>xt
       </text>
     </g>
   </g>
