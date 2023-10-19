@@ -56,6 +56,12 @@ namespace Svg.Pathing
             Owner?.OnPathUpdated();
         }
 
+        public void AddRange(SvgPathSegmentList items)
+        {
+            _segments.AddRange(items);
+            Owner?.OnPathUpdated();
+        }
+
         public void Clear()
         {
             _segments.Clear();

@@ -231,7 +231,21 @@ namespace Svg
 
         public SvgPath ToSvgPath()
         {
-            return ConvertPathToSvgPath(Path(null));
+            var path = ConvertPathToSvgPath(Path(null)).PathData;
+            foreach (var c in Children)
+            {
+                var txtBase = c as SvgTextBase;
+                if (txtBase != null)
+                {
+                    var cpd = ConvertPathToSvgPath(txtBase.Path(null)).PathData;
+                    path.AddRange(cpd);
+                }
+            }
+            var svgPath = new SvgPath()
+            {
+                PathData = path,
+            };
+            return svgPath;
         }
         /// <summary>
         /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.

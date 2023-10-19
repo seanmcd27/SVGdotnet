@@ -109,7 +109,7 @@ namespace Svg.UnitTests
             Assert.IsTrue(xml.Contains("dx=\"40\""));
             Assert.IsTrue(xml.Contains("dy=\"50\""));
         }
-        private bool TestConvertTextPathToSvgPathHelper(string fontFamily)
+        private bool TestConvertTextPathToSvgPathHelper(string fontFamily1, string fontFamily2, string fontFamily3)
         {
             string testStr = "ABCDEFGhijklmnop123.,";
             string testStr1 = "MNOPqrst780()/";
@@ -131,7 +131,9 @@ namespace Svg.UnitTests
                 ID = "span2",
             };
             sp2.CustomAttributes["class"] = "span2";
-            text.FontFamily = fontFamily;
+            text.FontFamily = fontFamily1;
+            sp1.FontFamily = fontFamily2;
+            sp2.FontFamily = fontFamily3;
             text.Children.Add(sp1);
             text.Children.Add(sp2);
             int fntSize = 32; // 24pt @ 96dpi
@@ -152,17 +154,20 @@ namespace Svg.UnitTests
             text.Y.Add(new SvgUnit(SvgUnitType.Pixel, fntSize));
             // sp1.Y = y2;
             // sp2.Y = y3;
+            var bitmap1 = new Bitmap(width, height);
+            var bitmap2 = new Bitmap(width, height);
+
             var svgDoc = new SvgDocument();
             svgDoc.Children.Add(GetStyleSheet());
             svgDoc.Children.Add(text);
-
-            var bitmap1 = new Bitmap(width, height);
             svgDoc.Draw(bitmap1);
+
             svgDoc = new SvgDocument();
+            svgDoc.Children.Add(GetStyleSheet());
             var path = text.ToSvgPath();
             svgDoc.Children.Add(path);
-            var bitmap2 = new Bitmap(width, height);
             svgDoc.Draw(bitmap2);
+
             float pct = 0.0f;
             Bitmap imgDiff;
             return ImagesAreEqual(bitmap1, bitmap2, out pct, out imgDiff);
@@ -172,9 +177,8 @@ namespace Svg.UnitTests
         {
             // TODO: make actually work which includes comparing to pre-generated manually verified image
 
-            // a couple of random fairly complex fonts that are built into windows
-            // Assert.IsTrue(TestConvertTextPathToSvgPathHelper("Times New Roman"));  
-            // Assert.IsTrue(TestConvertTextPathToSvgPathHelper("WingDings")); 
+            // some random fairly complex fonts that are built into windows
+            Assert.IsTrue(TestConvertTextPathToSvgPathHelper("Times New Roman", "WingDings", "Gabriola"));  
         }
     }
 }
