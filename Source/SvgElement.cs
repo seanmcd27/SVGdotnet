@@ -424,12 +424,26 @@ namespace Svg
         /// <param name="index">An <see cref="int"/> representing the index where the element was added to the collection.</param>
         internal void OnElementAdded(SvgElement child, int index)
         {
-            this.AddElement(child, index);
+            AddElement(child, index);
             SvgElement sibling = null;
             if (index < (Children.Count - 1))
             {
+                // this only happens when there's an insert
                 sibling = Children[index + 1];
+                // TODO: we need to make a corresponding entry in nodes. but, we have to figure out the right spot
+                //       since the indexes between nodes and children don't match
+                //       however, nothing seems to be using insert afaict. and it was already broken anyway since the
+                //       only place that maintains nodes is document load and some broken stuff in textbase
             }
+#if !OLD
+            else
+            {
+
+                // this is an add(append to the end)
+                Nodes.Add((ISvgNode)child);
+            }
+#endif
+
             var handler = ChildAdded;
             if (handler != null)
             {

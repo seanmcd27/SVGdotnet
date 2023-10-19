@@ -388,7 +388,9 @@ namespace Svg
                                 if (parent != null && element != null)
                                 {
                                     parent.Children.Add(element);
-                                    parent.Nodes.Add(element);
+#if OLD
+                                    parent.Nodes.Add(element); // -- node gets updated by elementadded event handler
+#endif
                                 }
                             }
 
@@ -416,6 +418,7 @@ namespace Svg
                                 element.Nodes.Clear(); // No sense wasting the space where it isn't needed
                             }
 
+                            // TODO: figure out why style elements are a special case of unknown instead of a first class element type
                             var unknown = element as SvgUnknownElement;
                             if (unknown != null && unknown.ElementName == "style")
                             {
@@ -424,24 +427,17 @@ namespace Svg
                             break;
 
                         // TODO: figure out how to round-trip comments
-                        case XmlNodeType.Comment:
-#if XMLCOMMENTS
-                            element = new SVGComment(reader.Value);
-                            // Add to the parents children
-                            if (elementStack.Count > 0)
-                            {
-                                parent = elementStack.Peek();
-                                if (parent != null && element != null)
-                                {
-                                    parent.Children.Add(element);
-                                    parent.Nodes.Add(element);
-                                }
-                            }
+                        // case XmlNodeType.Comment:
 
-                            // Push element into stack
-                            elementStack.Push(element);
-#endif
-                            break;
+                        // TODO: make sure there are tests that validate round trip of everything
+                        //       specifically we should be able to load each of the w3c test content files
+                        //       and rewrite them and get an identical diff(ignoring whitespace). pretty sure that
+                        //       won't work right now because all the 'content' nodes are munged into one type
+                        //       NOTE: need to include reformatmanifest functionality for this to work
+                        //       NOTE: namespace abbreviations on tags that introduce new abbrev get dropped, does this matter?
+                        // TODO: verify that complex documents with encoding and escaped CDATA that manages embedded CEND correctly
+                        //       is handled correctly.  see https://stackoverflow.com/questions/2784183/what-does-cdata-in-xml-mean
+                        //       for examples of the cases that need tested
                         case XmlNodeType.CDATA:
                         case XmlNodeType.Text:
                         case XmlNodeType.SignificantWhitespace:

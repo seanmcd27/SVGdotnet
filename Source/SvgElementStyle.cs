@@ -16,8 +16,8 @@ namespace Svg
         /// </value>
         protected virtual bool IsPathDirty
         {
-            get { return this._dirty; }
-            set { this._dirty = value; }
+            get { return _dirty; }
+            set { _dirty = value; }
         }
 
         /// <summary>
@@ -25,8 +25,8 @@ namespace Svg
         /// </summary>
         public void InvalidateChildPaths()
         {
-            this.IsPathDirty = true;
-            foreach (SvgElement element in this.Children)
+            IsPathDirty = true;
+            foreach (SvgElement element in Children)
             {
                 element.InvalidateChildPaths();
             }

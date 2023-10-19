@@ -42,6 +42,8 @@ namespace Svg
             get { return Content; }
             set
             {
+                // TODO: this is wrong. this needs to be parsed and held in a collection of svgcontent nodes or something
+                // this only works for the very simple unmixed content case
                 Nodes.Clear();
                 Children.Clear();
                 if (value != null)
@@ -272,6 +274,11 @@ namespace Svg
 
             return value;
         }
+        protected override void AddElement(SvgElement child, int index)
+        {
+            base.AddElement(child, index);
+            IsPathDirty = true;
+        }
 
         [SvgAttribute("onchange")]
         public event EventHandler<StringArg> Change;
@@ -352,3 +359,4 @@ namespace Svg
         }
     }
 }
+

@@ -98,6 +98,7 @@ namespace Svg
             return _path;
         }
 
+        // TODO: eliminate and add default argument to 2 parm version
         private void SetPath(TextDrawingState state)
         {
             SetPath(state, true);
@@ -155,7 +156,7 @@ namespace Svg
                     var specLength = this.TextLength.ToDeviceValue(state.Renderer, UnitRenderingType.Horizontal, this);
                     var actLength = state.TextBounds.Width;
                     var diff = (actLength - specLength);
-                    if (Math.Abs(diff) > 1.5)
+                    if (Math.Abs(diff) > 1.5)  // TODO: figure out why 1.5?
                     {
                         if (this.LengthAdjust == SvgTextLengthAdjust.Spacing)
                         {

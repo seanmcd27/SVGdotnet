@@ -1,4 +1,4 @@
-namespace Svg
+﻿namespace Svg
 {
     /// <summary>
     /// Defines a path that can be used by other <see cref="ISvgClipable"/> elements.
@@ -25,7 +25,7 @@ namespace Svg
         protected override void AddElement(SvgElement child, int index)
         {
             base.AddElement(child, index);
-            IsPathDirty = true;
+            IsPathDirty = true;  // TODO: figure out why this isn't done everywhere and moved to the base class, text needs it too.
         }
 
         /// <summary>
