@@ -192,6 +192,7 @@ namespace Svg
                     _content = value;
                     OnContentChanged(new ContentEventArgs { Content = value });
                 }
+                IsPathDirty = true;
             }
         }
 
@@ -424,6 +425,15 @@ namespace Svg
         /// <param name="index">An <see cref="int"/> representing the index where the element was added to the collection.</param>
         internal void OnElementAdded(SvgElement child, int index)
         {
+            if (child.Nodes.OfType<SvgContentNode>().Any())
+            {
+                child.Content = string.Concat((from n in child.Nodes select n.Content).ToArray());
+            }
+            else
+            {
+                child.Nodes.Clear(); // No sense wasting the space where it isn't needed
+            }
+
             AddElement(child, index);
             SvgElement sibling = null;
             if (index < (Children.Count - 1))
@@ -435,14 +445,12 @@ namespace Svg
                 //       however, nothing seems to be using insert afaict. and it was already broken anyway since the
                 //       only place that maintains nodes is document load and some broken stuff in textbase
             }
-#if !OLD
             else
             {
 
                 // this is an add(append to the end)
                 Nodes.Add((ISvgNode)child);
             }
-#endif
 
             var handler = ChildAdded;
             if (handler != null)

@@ -381,18 +381,7 @@ namespace Svg
                                 element = svgDocument;
                             }
 
-                            // Add to the parents children
-                            if (elementStack.Count > 0)
-                            {
-                                parent = elementStack.Peek();
-                                if (parent != null && element != null)
-                                {
-                                    parent.Children.Add(element);
-#if OLD
-                                    parent.Nodes.Add(element); // -- node gets updated by elementadded event handler
-#endif
-                                }
-                            }
+                            // don't add to parent until end element so that content property gets updated correctly for complex mixed content text and tspan trees
 
                             // Push element into stack
                             elementStack.Push(element);
@@ -409,13 +398,14 @@ namespace Svg
                             // Pop the element out of the stack
                             element = elementStack.Pop();
 
-                            if (element.Nodes.OfType<SvgContentNode>().Any())
+                            // Add to the parents children *after* the complete content gets updated
+                            if (elementStack.Count > 0)
                             {
-                                element.Content = string.Concat((from n in element.Nodes select n.Content).ToArray());
-                            }
-                            else
-                            {
-                                element.Nodes.Clear(); // No sense wasting the space where it isn't needed
+                                parent = elementStack.Peek();
+                                if (parent != null && element != null)
+                                {
+                                    parent.Children.Add(element);
+                                }
                             }
 
                             // TODO: figure out why style elements are a special case of unknown instead of a first class element type
