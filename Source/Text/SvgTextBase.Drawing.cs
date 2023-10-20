@@ -218,66 +218,72 @@ namespace Svg
 
         };
 
-        // NOTE: this should be turned into the right Iconvertible/typeconverter thingy. i don't have time right now.
+        // TODO: this should be turned into the right Iconvertible/typeconverter thingy. i don't have time right now.
+
+        // NOTE: the coords from this are device coords aka pixels.  and svgpath is always in user coordinates afaict
+        // so dpi to <real unit inch, cm, etc. > conversion must be done by the application with a scale transform
         static private SvgPath ConvertPathToSvgPath(GraphicsPath path)
         {
             // In Theory this is generic and could be used for more than just text. but, i don't have time to test it
             var svgPath = new SvgPath();
             var svgSegmentList = svgPath.PathData ?? new SvgPathSegmentList();
-            var pf = path.PathPoints;
-            var pt = path.PathTypes;
-            if (pf.Length != pt.Length)
+            if (path != null && path.PointCount > 0)
             {
-                throw new ApplicationException($"Unknown GDI+ pathdata point and type size mismatch points {pf.Length} types {pt.Length}");
-            }
-            //PointF start = new PointF(0.0f, 0.0f);
-            PointF? firstControl = null;
-            PointF? secondControl = null;
-            // TODO: figure out if gdi+ is relative or not(currently assuming not -- false)
-            // TODO: figure out how to mark points as px units
-            for (var i = 0; i < pt.Length; ++i)
-            {
-                byte flags = (byte)(pt[i] & (~((byte)GraphicsPathPointType.PathPointTypePathTypeMask)));
-                var rawpt = ((byte)pt[i]) & ((byte)GraphicsPathPointType.PathPointTypePathTypeMask);
-                switch (rawpt)
+                var pf = path.PathPoints;
+                var pt = path.PathTypes;
+                if (pf.Length != pt.Length)
                 {
-                    case (int)GraphicsPathPointType.PathPointTypeStart:
-                        {
-                            svgSegmentList.Add(new SvgMoveToSegment(false, pf[i]));
-                            break;
-                        }
-                    case (int)GraphicsPathPointType.PathPointTypeLine:
-                        {
-                            var s = new SvgLineSegment(false, pf[i]);
-                            svgSegmentList.Add(s);
-                            break;
-                        }
-                    case (int)GraphicsPathPointType.PathPointTypeBezier3:
-                        {
-                            if (firstControl == null)
-                            {
-                                firstControl = pf[i];
-                            }
-                            else if (secondControl == null)
-                            {
-                                secondControl = pf[i];
-                            }
-                            else
-                            {
-                                // svgcubic implicitly uses end of previous segment for start point
-                                var c = new SvgCubicCurveSegment(false, firstControl.Value, secondControl.Value, pf[i]);
-                                firstControl = null;
-                                secondControl = null;
-                                svgSegmentList.Add(c);
-                            }
-                            break;
-                        }
-                    default:
-                        throw new ApplicationException($"Unknown GDI+ pathdata type {rawpt}");
+                    throw new ApplicationException($"Unknown GDI+ pathdata point and type size mismatch points {pf.Length} types {pt.Length}");
                 }
-                if ((flags & ((byte)GraphicsPathPointType.PathPointTypeCloseSubpath)) != 0)
+                //PointF start = new PointF(0.0f, 0.0f);
+                PointF? firstControl = null;
+                PointF? secondControl = null;
+                // TODO: figure out if gdi+ is relative or not(currently assuming not -- false)
+                // TODO: figure out how to mark points as px units
+                for (var i = 0; i < pt.Length; ++i)
                 {
-                    svgSegmentList.Add(new SvgClosePathSegment(false));
+                    byte flags = (byte)(pt[i] & (~((byte)GraphicsPathPointType.PathPointTypePathTypeMask)));
+                    var rawpt = ((byte)pt[i]) & ((byte)GraphicsPathPointType.PathPointTypePathTypeMask);
+                    switch (rawpt)
+                    {
+                        case (int)GraphicsPathPointType.PathPointTypeStart:
+                            {
+                                svgSegmentList.Add(new SvgMoveToSegment(false, pf[i]));
+                                break;
+                            }
+                        case (int)GraphicsPathPointType.PathPointTypeLine:
+                            {
+                                var s = new SvgLineSegment(false, pf[i]);
+                                svgSegmentList.Add(s);
+                                break;
+                            }
+                        case (int)GraphicsPathPointType.PathPointTypeBezier3:
+                            {
+                                if (firstControl == null)
+                                {
+                                    firstControl = pf[i];
+                                }
+                                else if (secondControl == null)
+                                {
+                                    secondControl = pf[i];
+                                }
+                                else
+                                {
+                                    // svgcubic implicitly uses end of previous segment for start point
+                                    var c = new SvgCubicCurveSegment(false, firstControl.Value, secondControl.Value, pf[i]);
+                                    firstControl = null;
+                                    secondControl = null;
+                                    svgSegmentList.Add(c);
+                                }
+                                break;
+                            }
+                        default:
+                            throw new ApplicationException($"Unknown GDI+ pathdata type {rawpt}");
+                    }
+                    if ((flags & ((byte)GraphicsPathPointType.PathPointTypeCloseSubpath)) != 0)
+                    {
+                        svgSegmentList.Add(new SvgClosePathSegment(false));
+                    }
                 }
             }
             svgPath.PathData = svgSegmentList;
