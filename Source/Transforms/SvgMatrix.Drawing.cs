@@ -10,12 +10,12 @@ namespace Svg.Transforms
             get
             {
                 return new Matrix(
-                    Points[0],
-                    Points[1],
-                    Points[2],
-                    Points[3],
-                    Points[4],
-                    Points[5]
+                    Coordinates[0],
+                    Coordinates[1],
+                    Coordinates[2],
+                    Coordinates[3],
+                    Coordinates[4],
+                    Coordinates[5]
                 );
             }
         }

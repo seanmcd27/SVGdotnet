@@ -109,14 +109,16 @@ namespace Svg.UnitTests
             Assert.IsTrue(xml.Contains("dx=\"40\""));
             Assert.IsTrue(xml.Contains("dy=\"50\""));
         }
-        private bool TestConvertTextPathToSvgPathHelper(string fontFamily1, string fontFamily2, string fontFamily3)
+        private bool TestConvertTextPathToSvgPathHelper(string[] fontlist)
         {
+            // TODO: test more combinations of mixed content including nested tspans, and tspans with no content in the top level text
+            // TODO: multiple font sizes in all combinations
             string testStr = "ABCDEFGhijklmnop123.,";
             string testStr1 = "MNOPqrst780()/";
             string testStr2 = "WXYZabc4567*?@";
             SvgText text = new SvgText()
             {
-                Text = testStr,
+                //Text = testStr,
                 ID = "text1",
             };
             SvgTextSpan sp1 = new SvgTextSpan()
@@ -131,9 +133,9 @@ namespace Svg.UnitTests
                 ID = "span2",
             };
             sp2.CustomAttributes["class"] = "span2";
-            text.FontFamily = fontFamily1;
-            sp1.FontFamily = fontFamily2;
-            sp2.FontFamily = fontFamily3;
+            text.FontFamily = fontlist[0];
+            sp1.FontFamily = fontlist[1];
+            sp2.FontFamily = fontlist[2];
             text.Children.Add(sp1);
             text.Children.Add(sp2);
             int fntSize = 32; // 24pt @ 96dpi
@@ -175,10 +177,14 @@ namespace Svg.UnitTests
         [Test]
         public void TestConvertTextPathToSvgPath()
         {
+            string[] fontlist =
+            {
+                "Times New Roman", "WingDings", "Gabriola",
+            };
             // TODO: make actually work which includes comparing to pre-generated manually verified image
 
             // some random fairly complex fonts that are built into windows
-            Assert.IsTrue(TestConvertTextPathToSvgPathHelper("Times New Roman", "WingDings", "Gabriola"));  
+            Assert.IsTrue(TestConvertTextPathToSvgPathHelper(fontlist));  
         }
     }
 }

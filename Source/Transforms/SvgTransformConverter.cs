@@ -7,6 +7,8 @@ using Svg.Helpers;
 
 namespace Svg.Transforms
 {
+    // this converts to/from string form that appears in svg transform attribute
+    // TODO: add support for more general form that converts any individual xform to general matrix xform to support static pre-computed composition
     public class SvgTransformConverter : TypeConverter
     {
         private static readonly char[] SplitChars = new[] { ' ', ',' };

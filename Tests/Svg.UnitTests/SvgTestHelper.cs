@@ -216,6 +216,22 @@ namespace Svg.UnitTests
 
             CheckSvg(svgDoc, img);
         }
+        protected virtual SvgDocument EmptySvg(int width, int height)
+        {
+            var d = new SvgDocument();
+            d.Ppi = 96;
+
+            var c = new SvgFragment();
+
+            c.Width = width;
+            c.Height = height;
+            c.ViewBox = new SvgViewBox(0f, 0f, width, height);
+
+            d.Children.Add(c);
+
+            return d;
+        }
+
 
         /// <summary>
         /// Open SVG document from XML document.
