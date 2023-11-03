@@ -14,6 +14,22 @@ namespace Svg.Transforms
     public sealed partial class SvgMatrix : SvgTransform
     {
         private const int MAX_SIZE = 6;
+        // svg matrix(a,b,c,d,e,f)
+        // a c e
+        // b d f
+        // 0 0 1
+        //
+        // drawing2d matrix (a,b,c,d,e,f)
+        // a b 0
+        // c d 0
+        // e f 1
+        //
+        // system.numerics matrix3x2 (a,b,c,d,e,f)
+        // a(m11) b(m12)
+        // c(m21) d(m22)
+        // e(m31) f(m31)
+
+
         private Matrix3x2 _mat;
         // TODO: implment named accessors a-f per spec https://www.w3.org/TR/SVG11/coords.html#InterfaceSVGMatrix
         // these aren't points they're individual coordinates
@@ -21,7 +37,7 @@ namespace Svg.Transforms
         public List<float> Points { get { return Coordinates; } set { Coordinates = value; } }
         public List<float> Coordinates { get {
                 var r = new List<float>();
-                r.Add(_mat.M11); r.Add(_mat.M12); r.Add(_mat.M22); r.Add(_mat.M31); r.Add(_mat.M22); r.Add(_mat.M32);
+                r.Add(_mat.M11); r.Add(_mat.M12); r.Add(_mat.M21); r.Add(_mat.M22); r.Add(_mat.M31); r.Add(_mat.M32);
                 return r;
             } set {
                 if (value.Count != MAX_SIZE) {
@@ -37,7 +53,7 @@ namespace Svg.Transforms
 
         public override string WriteToString()
         {
-            return $"matrix({_mat.M11.ToSvgString()}, {_mat.M12.ToSvgString()}, {_mat.M21.ToSvgString()}, {_mat.M21.ToSvgString()}, {_mat.M31.ToSvgString()}, {_mat.M32.ToSvgString()})";
+            return $"matrix({_mat.M11.ToSvgString()}, {_mat.M12.ToSvgString()}, {_mat.M21.ToSvgString()}, {_mat.M22.ToSvgString()}, {_mat.M31.ToSvgString()}, {_mat.M32.ToSvgString()})";
         }
 
         public SvgMatrix(List<float> m)

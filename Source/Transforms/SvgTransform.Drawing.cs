@@ -6,6 +6,21 @@ namespace Svg.Transforms
 {
     public static class MatrixExtensions
     {
+        // svg matrix(a,b,c,d,e,f)
+        // a c e
+        // b d f
+        // 0 0 1
+        //
+        // drawing2d matrix (a,b,c,d,e,f)
+        // a b 0
+        // c d 0
+        // e f 1
+        //
+        // system.numerics matrix3x2 (a,b,c,d,e,f)
+        // a(m11) b(m12)
+        // c(m21) d(m22)
+        // e(m31) f(m31)
+
         public static Matrix3x2 ToMatrix3x2(this Matrix m)
         {
             return new Matrix3x2(m.Elements[0], m.Elements[1], m.Elements[2], m.Elements[3], m.Elements[4], m.Elements[5]);
