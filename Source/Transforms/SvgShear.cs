@@ -3,6 +3,8 @@
     /// <summary>
     /// The class which applies the specified shear vector to this Matrix.
     /// </summary>
+    ///
+    // TODO: figure out why this is here.  no svg spec that i can find mentions a shear transform and none of the browsers appear to support such a thing
     public sealed partial class SvgShear : SvgTransform
     {
         public float X { get; set; }

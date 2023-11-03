@@ -29,6 +29,8 @@ namespace Svg.UnitTests
             t.M32 = p.Y;
             return t;
         }
+        protected override string TestResource { get { return GetFullResourceString("matrix.matrix.bmp"); } }
+
         /// <summary>
         /// We should get a valid dpi (probably 72, 96 or similar).
         /// </summary>
@@ -88,11 +90,74 @@ namespace Svg.UnitTests
 
             doc.Children.Add(pl4);
 
+            // skewX
+            var pl5 = pl.DeepCopy();
+            pl5.Transforms = new SvgTransformCollection();
+            pl5.Stroke = new SvgColourServer(Color.Purple);
+
+            xlate = new SvgTranslate(75f, 100f);
+            pl5.Transforms.Add(xlate);
+            var skew = new SvgSkew(45, 0);
+            pl5.Transforms.Add(skew);
+
+            doc.Children.Add(pl5);
+
+            // skewY
+            var pl6 = pl.DeepCopy();
+            pl6.Transforms = new SvgTransformCollection();
+            pl6.Stroke = new SvgColourServer(Color.DarkGray);
+
+            xlate = new SvgTranslate(150f, 100f);
+            pl6.Transforms.Add(xlate);
+            skew = new SvgSkew(0, 45);
+            pl6.Transforms.Add(skew);
+
+            doc.Children.Add(pl6);
+
+
+            // skew X and Y
+            var pl7 = pl.DeepCopy();
+            pl7.Transforms = new SvgTransformCollection();
+            pl7.Stroke = new SvgColourServer(Color.DarkGoldenrod);
+
+            xlate = new SvgTranslate(225f, 100f);
+            pl7.Transforms.Add(xlate);
+            skew = new SvgSkew(45, 0);
+            pl7.Transforms.Add(skew);
+            skew = new SvgSkew(0, 45);
+            pl7.Transforms.Add(skew);
+
+            doc.Children.Add(pl7);
+
+            // TODO: figure out what to do with the 'shear' transform
+
+            // random other matrix
+
+
             var bitmap1 = new Bitmap(width, height);
             base_doc.Draw(bitmap1);
 
+            var stream = GetResourceStream(TestResource);
+            var bitmap2 = new Bitmap(stream);
 
+            Assert.IsTrue(ImagesAreEqual(bitmap1, bitmap2));
         }
-        // TODO: the same above operations using named transforms directly
+        // TODO: verify skew(45,45) throws
+        [Test]
+        public void TestSkew()
+        {
+            float approx_eps = .001041f;
+            var skew = new SvgSkew(44, 46);
+            skew.AngleX = 45 - approx_eps;
+            Assert.That(() => { skew.AngleY = 45 + approx_eps; },
+                Throws.TypeOf<System.ArgumentException>().With.Message.Contains("degenerates"));
+            skew.AngleX = 0f;
+            skew.AngleY = 45 - approx_eps;
+            Assert.That(() => { skew.AngleX = 45 + approx_eps; },
+                Throws.TypeOf<System.ArgumentException>().With.Message.Contains("degenerates"));
+        }
+
+
+        // TODO: the same above operations using raw matrix transforms directly
     }
 }

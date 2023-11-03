@@ -63,6 +63,7 @@
     <EmbeddedResource Include="Resources\Issue399_LexerIssue\LexerTestTemplate.svg" />
     <EmbeddedResource Include="Resources\Issue399_LexerIssue\EmptyDTag.svg" />
     <EmbeddedResource Include="Resources\Issue518_Entities\Entities.svg" />
+    <EmbeddedResource Include="Resources\matrix\matrix.bmp" />
     <EmbeddedResource Include="Resources\ScriptTag\TestFile.svg" />
   </ItemGroup>
 
