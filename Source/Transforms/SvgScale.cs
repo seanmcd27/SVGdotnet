@@ -1,6 +1,6 @@
-namespace Svg.Transforms
+﻿namespace Svg.Transforms
 {
-    public sealed partial class SvgScale : SvgTransform
+    public sealed partial class SvgScale : SvgSpecificTransform
     {
         public float X { get; set; }
 
@@ -23,6 +23,24 @@ namespace Svg.Transforms
             X = x;
             Y = y;
         }
+
+        public override SvgMatrix SvgMatrix
+        {
+            get
+            {
+                var m = new SvgMatrix();
+                m.a = X;
+                m.d = Y;
+                return m;
+
+            }
+            set
+            {
+                X = value.a;
+                Y = value.d;
+            }
+        }
+
 
         public override object Clone()
         {

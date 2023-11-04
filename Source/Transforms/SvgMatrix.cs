@@ -6,8 +6,6 @@ namespace Svg.Transforms
 {
     // TODO: support compose/multiply.  e.g full set of operations on ISVGMatrix from SVG 1.1 spec
 
-    // TODO: need unittest to verify all the row/column major 3x2, 2x3 numerics 3x2 vs. drawing2d stuff is all correct w/ no typos or inadvertent transpositions
-
     /// <summary>
     /// The class which applies custom transform to this Matrix (Required for projects created by the Inkscape).
     /// </summary>
@@ -25,14 +23,22 @@ namespace Svg.Transforms
         // e f 1
         //
         // system.numerics matrix3x2 (a,b,c,d,e,f)
-        // a(m11) b(m12)
-        // c(m21) d(m22)
-        // e(m31) f(m31)
+        // a(m11) b(m12) 0
+        // c(m21) d(m22) 0
+        // e(m31) f(m31) 1
 
 
         private Matrix3x2 _mat;
-        // TODO: implment named accessors a-f per spec https://www.w3.org/TR/SVG11/coords.html#InterfaceSVGMatrix
-        // these aren't points they're individual coordinates
+        // named accessors a-f per spec https://www.w3.org/TR/SVG11/coords.html#InterfaceSVGMatrix
+
+        public float a { get => _mat.M11; set => _mat.M11 = value; }
+        public float b { get => _mat.M12; set => _mat.M12 = value; }
+        public float c { get => _mat.M21; set => _mat.M21 = value; }
+        public float d { get => _mat.M22; set => _mat.M22 = value; }
+        public float e { get => _mat.M31; set => _mat.M31 = value; }
+        public float f { get => _mat.M32; set => _mat.M32 = value; }
+
+        // these aren't entire points they're individual coordinates, name should match semantics
         [Obsolete("use coordinates property")]
         public List<float> Points { get { return Coordinates; } set { Coordinates = value; } }
         public List<float> Coordinates { get {
@@ -64,10 +70,28 @@ namespace Svg.Transforms
             }
             Coordinates = m;
         }
+        public SvgMatrix(float a1, float b1, float c1, float d1, float e1, float f1)
+        {
+            a = a1;
+            b = b1;
+            c = c1;
+            d = d1;
+            e = e1;
+            f = f1;
+        }
+
+        public SvgMatrix()
+        {
+            _mat = Matrix3x2.Identity;
+        }
+        public SvgMatrix(Matrix3x2 m)
+        {
+            _mat = m;
+        }
 
         public override object Clone()
         {
-            return new SvgMatrix(Coordinates);
+            return new SvgMatrix(_mat);
         }
     }
 }

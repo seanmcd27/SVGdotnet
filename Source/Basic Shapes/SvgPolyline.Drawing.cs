@@ -30,7 +30,7 @@ namespace Svg
                             continue;
                         }
 
-                        // TODO: Remove unrequired first line
+                        // TODO: Remove unrequired first line, i.e. remove duplicate points that moveto self.
                         if (_path.PointCount == 0)
                         {
                             _path.AddLine(endPoint, endPoint);

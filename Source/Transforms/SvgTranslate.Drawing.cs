@@ -1,9 +1,9 @@
-#if !NO_SDC
+﻿#if !NO_SDC
 using System.Drawing.Drawing2D;
 
 namespace Svg.Transforms
 {
-    public sealed partial class SvgTranslate : SvgTransform
+    public sealed partial class SvgTranslate : SvgSpecificTransform
     {
         public override Matrix Matrix
         {

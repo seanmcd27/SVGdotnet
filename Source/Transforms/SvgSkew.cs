@@ -8,7 +8,7 @@ namespace Svg.Transforms
     /// <summary>
     /// The class which applies the specified skew vector to this Matrix.
     /// </summary>
-    public sealed partial class SvgSkew : SvgTransform
+    public sealed partial class SvgSkew : SvgSpecificTransform
     {
         const float _eps = (1f / 960f); // TODO: validate assumption about epsilon. but, an order of magnitude smaller than 1/96 seems reasonable for graphics. also this should probably be in a base class of some sort
         float _x = 0f;
@@ -78,6 +78,23 @@ namespace Svg.Transforms
         {
             AngleX = x;
             AngleY = y;
+        }
+
+        public override SvgMatrix SvgMatrix
+        {
+            get
+            {
+                var m = new SvgMatrix();
+                m.b = (float)Math.Tan(AngleY);
+                m.c = (float)Math.Tan(AngleX);
+                return m;
+
+            }
+            set
+            {
+                AngleX = (float)Math.Atan(value.c);
+                AngleY = (float)Math.Atan(value.b);
+            }
         }
 
         public override object Clone()

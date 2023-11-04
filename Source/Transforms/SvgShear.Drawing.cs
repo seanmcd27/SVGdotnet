@@ -3,7 +3,7 @@ using System.Drawing.Drawing2D;
 
 namespace Svg.Transforms
 {
-    public sealed partial class SvgShear : SvgTransform
+    public sealed partial class SvgShear : SvgSpecificTransform
     {
         public override Matrix Matrix
         {

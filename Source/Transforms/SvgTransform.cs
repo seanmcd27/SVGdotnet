@@ -2,6 +2,10 @@
 
 namespace Svg.Transforms
 {
+
+    public sealed partial class SvgMatrix { };
+
+
     public abstract partial class SvgTransform : ICloneable
     {
         public abstract string WriteToString();
@@ -12,5 +16,10 @@ namespace Svg.Transforms
         {
             return WriteToString();
         }
+    }
+    public abstract partial class SvgSpecificTransform : SvgTransform
+    {
+        public abstract SvgMatrix SvgMatrix { get; set; }
+
     }
 }

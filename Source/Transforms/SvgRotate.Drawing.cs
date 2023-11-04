@@ -1,9 +1,9 @@
-#if !NO_SDC
+﻿#if !NO_SDC
 using System.Drawing.Drawing2D;
 
 namespace Svg.Transforms
 {
-    public sealed partial class SvgRotate : SvgTransform
+    public sealed partial class SvgRotate : SvgSpecificTransform
     {
         public override Matrix Matrix
         {
@@ -11,6 +11,7 @@ namespace Svg.Transforms
             {
                 var matrix = new Matrix();
                 matrix.Translate(CenterX, CenterY);
+                // both svg and dot net define positive angle to be clockwise 
                 matrix.Rotate(Angle);
                 matrix.Translate(-CenterX, -CenterY);
                 return matrix;

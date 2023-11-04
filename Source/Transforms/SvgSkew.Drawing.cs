@@ -4,7 +4,7 @@ using System.Drawing.Drawing2D;
 
 namespace Svg.Transforms
 {
-    public sealed partial class SvgSkew : SvgTransform
+    public sealed partial class SvgSkew : SvgSpecificTransform
     {
         public override Matrix Matrix
         {
