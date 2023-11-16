@@ -1,4 +1,4 @@
-#if !NO_SDC
+﻿#if !NO_SDC
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -91,7 +91,7 @@ namespace Svg
                             case SvgMarkerUnits.StrokeWidth:
                                 if (ViewBox.Width > 0 && ViewBox.Height > 0)
                                 {
-                                    transMatrix.Scale(MarkerWidth, MarkerHeight);
+                                    transMatrix.Scale(MarkerWidth.ToDeviceValue(null, UnitRenderingType.Other, null), MarkerHeight.ToDeviceValue(null, UnitRenderingType.Other, null));
                                     var strokeWidth = pOwner.StrokeWidth.ToDeviceValue(pRenderer, UnitRenderingType.Other, this);
                                     transMatrix.Translate(AdjustForViewBoxWidth(-RefX.ToDeviceValue(pRenderer, UnitRenderingType.Horizontal, this) *
                                             strokeWidth),
@@ -167,7 +167,7 @@ namespace Svg
                 case SvgMarkerUnits.StrokeWidth:
                     using (var transMatrix = new Matrix())
                     {
-                        transMatrix.Scale(AdjustForViewBoxWidth(pPath.StrokeWidth), AdjustForViewBoxHeight(pPath.StrokeWidth));
+                        transMatrix.Scale(AdjustForViewBoxWidth(pPath.StrokeWidth.ToDeviceValue(null, UnitRenderingType.Other, null)), AdjustForViewBoxHeight(pPath.StrokeWidth.ToDeviceValue(null, UnitRenderingType.Other, null)));
                         pRet.Transform(transMatrix);
                     }
                     break;

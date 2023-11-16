@@ -36,7 +36,7 @@ namespace Svg.UnitTests
             {
                 IntPtr handle = ctrlGraphics.GetHdc();
 
-                var rect = new RectangleF(0, 0, svgDoc.Width, svgDoc.Height);
+                var rect = new RectangleF(0, 0, svgDoc.Width.ToDeviceValue(null, UnitRenderingType.Other, svgDoc), svgDoc.Height.ToDeviceValue(null, UnitRenderingType.Other, svgDoc));
                 metafile = new Metafile(stream,
                     handle,
                     rect,

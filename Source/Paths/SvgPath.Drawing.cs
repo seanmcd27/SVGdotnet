@@ -42,7 +42,7 @@ namespace Svg
                     else if (renderer == null)
                     {
                         // Calculate boundary including stroke width.
-                        var radius = StrokeWidth * 2;
+                        var radius = StrokeWidth.ToDeviceValue(null, UnitRenderingType.Other, null) * 2;
                         var bounds = _path.GetBounds();
                         _path.AddEllipse(bounds.Left - radius, bounds.Top - radius, 2 * radius, 2 * radius);
                         _path.AddEllipse(bounds.Right - radius, bounds.Bottom - radius, 2 * radius, 2 * radius);

@@ -7,6 +7,11 @@ namespace Svg
 {
     public partial struct SvgUnit
     {
+        // TODO: figure out how _deviceValue gets recalculated if ownership topology or containing viewbox/transforms change. i'm pretty
+        // sure _deviceValue shouldn't be cached since most stuff it depends on can change(even systemdpi) and there's no notion of dirty here.
+        // also pretty sure that owner should be required or weird bugs where ppi isn't consistent are going to hide
+
+
         /// <summary>
         /// Converts the current unit to one that can be used at render time.
         /// </summary>
@@ -144,6 +149,14 @@ namespace Svg
             return this._deviceValue.HasValue ? this._deviceValue.Value : 0f;
         }
 
+
+#if DISABLED
+// this implicit conversion is a problem.  it causes weird conversions in unexpected places on the non-drawing side
+// e.g. you can pass an svgunit to svgtranslate ctor which needs user units as a float and you get device units which aren't necessarily the same
+// what really needs to happen is that each member of svgunittype enum should actually be a real type and there should be one on the drawing side for devicetype
+// then you could freely implicitly autoconvert between all of them using the appropriate arithmetic without confusion or unexpected results and drawing
+// should just use the Value property of the devicetype when passing a float to the underlying canvas routines
+
         /// <summary>
         /// Performs an implicit conversion from <see cref="Svg.SvgUnit"/> to <see cref="System.Single"/>.
         /// </summary>
@@ -153,7 +166,7 @@ namespace Svg
         {
             return value.ToDeviceValue(null, UnitRenderingType.Other, null);
         }
-
+#endif
         private IFontDefn GetFont(ISvgRenderer renderer, SvgElement owner, SvgFontManager fontManager)
         {
             var visual = owner?.Parents.OfType<SvgVisualElement>().FirstOrDefault();

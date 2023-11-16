@@ -42,7 +42,7 @@ namespace Svg
 
 
                 // Calculate any required scaling
-                var scaleBounds = RectangleF.Inflate(renderingElement.Bounds, renderingElement.StrokeWidth, renderingElement.StrokeWidth);
+                var scaleBounds = RectangleF.Inflate(renderingElement.Bounds, renderingElement.StrokeWidth.ToDeviceValue(renderer, UnitRenderingType.Other, this), renderingElement.StrokeWidth.ToDeviceValue(renderer, UnitRenderingType.Other, this));
                 var scale = CalcScale(scaleBounds, path);
 
                 // Not ideal, but this makes sure that the rest of the shape gets properly filled or drawn

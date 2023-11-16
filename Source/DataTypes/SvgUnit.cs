@@ -149,6 +149,10 @@ namespace Svg
             return string.Concat(this.Value.ToSvgString(), type);
         }
 
+        // TODO: this implicit conversion is a problem.  it bypasses necessary arithmetic when mixing different svgunittype and causes hidden errors
+        // what really needs to happen is that each member of svgunittype enum should actually be a real type and there should be one on the drawing side for devicetype
+        // then you could freely implicitly autoconvert between all of them using the appropriate arithmetic without confusion or unexpected results
+
         /// <summary>
         /// Performs an implicit conversion from <see cref="System.Single"/> to <see cref="Svg.SvgUnit"/>.
         /// </summary>

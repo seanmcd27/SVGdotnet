@@ -185,7 +185,7 @@ namespace Svg
         /// <param name="renderer">The <see cref="ISvgRenderer"/> object to render to.</param>
         protected internal virtual bool RenderStroke(ISvgRenderer renderer)
         {
-            if (Stroke != null && Stroke != SvgPaintServer.None && StrokeWidth > 0f)
+            if (Stroke != null && Stroke != SvgPaintServer.None && StrokeWidth.ToDeviceValue(null, UnitRenderingType.Other, null) > 0f)
             {
                 var strokeWidth = StrokeWidth.ToDeviceValue(renderer, UnitRenderingType.Other, this);
                 using (var brush = Stroke.GetBrush(this, renderer, FixOpacityValue(StrokeOpacity), true))
@@ -228,7 +228,7 @@ namespace Svg
                                         strokeDashArray = (SvgUnitCollection)StrokeDashArray.Clone();
                                         strokeDashArray.AddRange(StrokeDashArray);
                                     }
-                                    var dashOffset = StrokeDashOffset;
+                                    var dashOffset = StrokeDashOffset.ToDeviceValue(null, UnitRenderingType.Other, null);
 
                                     strokeWidth = Math.Max(strokeWidth, 1f);
 
@@ -295,8 +295,8 @@ namespace Svg
 
                                         if (dashOffset != 0f)
                                         {
-                                            pen.DashOffset = ((dashOffset.ToDeviceValue(renderer, UnitRenderingType.Other, this) <= 0f) ? 1f :
-                                                dashOffset.ToDeviceValue(renderer, UnitRenderingType.Other, this)) / strokeWidth;
+                                            pen.DashOffset = ((dashOffset <= 0f) ? 1f :
+                                                dashOffset) / strokeWidth;
                                         }
                                     }
                                 }

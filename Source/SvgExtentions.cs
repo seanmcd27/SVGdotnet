@@ -24,7 +24,7 @@ namespace Svg
 #if !NO_SDC
         public static RectangleF GetRectangle(this SvgRectangle r)
         {
-            return new RectangleF(r.X, r.Y, r.Width, r.Height);
+            return new RectangleF(r.X.ToDeviceValue(null, UnitRenderingType.Other, null), r.Y.ToDeviceValue(null, UnitRenderingType.Other, null), r.Width.ToDeviceValue(null, UnitRenderingType.Other, null), r.Height.ToDeviceValue(null, UnitRenderingType.Other, null));
         }
 #endif
         public static string GetXML(this SvgDocument doc)

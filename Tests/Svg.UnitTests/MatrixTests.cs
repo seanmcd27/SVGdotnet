@@ -27,8 +27,12 @@ namespace Svg.UnitTests
         public static Matrix3x2 GetTranslate(SvgPoint p)
         {
             var t = Matrix3x2.Identity;
-            t.M31 = p.X;
-            t.M32 = p.Y;
+            if (p.X.Type != SvgUnitType.User || p.Y.Type != SvgUnitType.User)
+            {
+                throw new ArgumentException("translation point must be expressed in user units");
+            }
+            t.M31 = p.X.Value;
+            t.M32 = p.Y.Value;
             return t;
         }
         protected override string TestResource { get { return GetFullResourceString("matrix.matrix.bmp"); } }
@@ -274,6 +278,16 @@ namespace Svg.UnitTests
                 Throws.TypeOf<System.ArgumentException>().With.Message.Contains("degenerates"));
         }
 
+#if DISABLED
+        [Test]
+        public void TransformUnitConversion()
+        {
+            var u = new SvgUnit(SvgUnitType.Inch, 1.5f);
+            var u2 = new SvgUnit(SvgUnitType.Centimeter, 1.5f);
+            var t = new Svg.Transforms.SvgTranslate(u, u2);
+            Console.WriteLine($"u {u.Value} u2 {u2.Value} t {t.X} {t.Y}");
+        }
+#endif
 
     }
 }

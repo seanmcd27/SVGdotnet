@@ -1,4 +1,4 @@
-#if !NO_SDC
+﻿#if !NO_SDC
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -16,7 +16,7 @@ namespace Svg
         {
             if (_path == null || IsPathDirty)
             {
-                var halfStrokeWidth = base.StrokeWidth / 2;
+                var halfStrokeWidth = base.StrokeWidth.ToDeviceValue(renderer, UnitRenderingType.Other, this) / 2;
 
                 // If it is to render, don't need to consider stroke
                 if (renderer != null)

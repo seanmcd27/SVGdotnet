@@ -106,7 +106,7 @@ namespace Svg
                     if (child is SvgFragment)
                     {
                         childBounds = ((SvgFragment)child).Bounds;
-                        childBounds.Offset(((SvgFragment)child).X, ((SvgFragment)child).Y);
+                        childBounds.Offset(((SvgFragment)child).X.ToDeviceValue(null, UnitRenderingType.Other, null), ((SvgFragment)child).Y.ToDeviceValue(null, UnitRenderingType.Other, null));
                     }
                     else if (child is SvgVisualElement)
                     {

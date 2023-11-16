@@ -18,7 +18,7 @@ namespace Svg
             var fontSizeUnit = this.FontSize;
             if (fontSizeUnit == SvgUnit.None || fontSizeUnit == SvgUnit.Empty)
             {
-                fontSize = new SvgUnit(SvgUnitType.Em, 1.0f);
+                fontSize = new SvgUnit(SvgUnitType.Em, 1.0f).ToDeviceValue(null, UnitRenderingType.Other, null);
             }
             else
             {

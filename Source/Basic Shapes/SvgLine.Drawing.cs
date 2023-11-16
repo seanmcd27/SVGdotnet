@@ -1,4 +1,4 @@
-#if !NO_SDC
+﻿#if !NO_SDC
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
@@ -10,7 +10,7 @@ namespace Svg
 
         public override GraphicsPath Path(ISvgRenderer renderer)
         {
-            if ((this._path == null || this.IsPathDirty) && base.StrokeWidth > 0)
+            if ((this._path == null || this.IsPathDirty) && base.StrokeWidth.ToDeviceValue(renderer, UnitRenderingType.Other, this) > 0)
             {
                 PointF start = new PointF(this.StartX.ToDeviceValue(renderer, UnitRenderingType.Horizontal, this),
                     this.StartY.ToDeviceValue(renderer, UnitRenderingType.Vertical, this));
@@ -29,7 +29,7 @@ namespace Svg
                 else
                 {    // only when calculating boundary
                     _path.StartFigure();
-                    var radius = base.StrokeWidth / 2;
+                    var radius = base.StrokeWidth.ToDeviceValue(renderer, UnitRenderingType.Other, this) / 2;
                     _path.AddEllipse(start.X - radius, start.Y - radius, 2 * radius, 2 * radius);
                     _path.AddEllipse(end.X - radius, end.Y - radius, 2 * radius, 2 * radius);
                     _path.CloseFigure();
